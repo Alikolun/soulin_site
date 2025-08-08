@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aşklar - Sevilin Sevin</title>
+<style>
+  /* Arka plan kalpler */
+  body, html {
+    margin:0; padding:0; height:100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #ffe1ec;
+    color: #330033;
+    overflow-y: auto;
+    position: relative;
+  }
+  /* Kalpler arka plan */
+  body::before {
+    content: "♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥";
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 4rem;
+    color: #ff3b81;
+    opacity: 0.15;
+    letter-spacing: 1.5rem;
+    pointer-events: none;
+    user-select:none;
+    z-index: 0;
+    white-space: nowrap;
+  }
+  body::after {
+    content: "❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤ ❤";
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    color: #ff6f91;
+    opacity: 0.12;
+    letter-spacing: 1rem;
+    pointer-events: none;
+    user-select:none;
+    z-index: 0;
+    white-space: nowrap;
+  }
+
+  #mainContainer {
+    max-width: 800px;
+    margin: 30px auto 50px auto;
+    background: #fff0f6;
+    border-radius: 20px;
+    box-shadow: 0 0 25px #d455a3cc;
+    padding: 20px 25px;
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 30px;
+    color: #a43a71;
+  }
+
+  label.file-label {
+    display: inline-block;
+    background: #d455a3;
+    color: #fff0f6;
+    padding: 10px 22px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 0 12px #d455a3cc;
+    margin-bottom: 15px;
+    user-select: none;
+  }
+  label.file-label:hover {
+    background: #a43a71;
+  }
+  input[type="file"] {
+    display: none;
+  }
+
+  textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    border-radius: 14px;
+    border: 2px solid #a43a71;
+    padding: 12px;
+    font-size: 16px;
+    color: #330033;
+    background: #fff0f6;
+    margin-bottom: 18px;
+  }
+  textarea::placeholder {
+    color: #a43a71aa;
+  }
+
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+  .media-grid img, .media-grid video, .media-grid audio {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #a43a71cc;
+    background: #fff0f6;
+  }
+  video, audio {
+    outline: none;
+  }
+
+  #locationDisplay {
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 12px;
+    color: #6a0a47;
+    min-height: 22px;
+  }
+
+  #getLocationBtn {
+    background: #d455a3;
+    border: none;
+    color: #fff0f6;
+    padding: 11px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 0 12px #d455a3cc;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+  #getLocationBtn:hover {
+    background: #a43a71;
+  }
+
+  #togetherTime {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 35px;
+    color: #6a0a47;
+    text-align: center;
+  }
+
+  /* Başlık bölümleri */
+  h2 {
+    color: #a43a71;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px){
+    .media-grid {
+      grid-template-columns: repeat(auto-fit,minmax(110px,1fr));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="mainContainer">
+  <h1>Sevilin Sevin</h1>
+
+  <section>
+    <h2>Videolar (Sesli oynatılır)</h2>
+    <label class="file-label" for="videoInput">Video Seç</label>
+    <input type="file" id="videoInput" accept="video/*" multiple />
+    <div class="media-grid" id="videoGrid"></div>
+  </section>
+
+  <section>
+    <h2>Fotoğraflar</h2>
+    <label class="file-label" for="photoInput">Fotoğraf Seç</label>
+    <input type="file" id="photoInput" accept="image/*" multiple />
+    <div class="media-grid" id="photoGrid"></div>
+  </section>
+
+  <section>
+    <h2>Şarkılar (Sesli oynatılır)</h2>
+    <label class="file-label" for="audioInput">Şarkı Seç (mp3 vb.)</label>
+    <input type="file" id="audioInput" accept="audio/*" multiple />
+    <div class="media-grid" id="audioGrid"></div>
+  </section>
+
+  <section>
+    <h2>Şiir Alanları (10-700 karakter)</h2>
+    <textarea maxlength="700" minlength="10" placeholder="Şiirinizi yazın..." id="poem1"></textarea>
+    <textarea maxlength="700" minlength="10" placeholder="Şiirinizi yazın..." id="poem2"></textarea>
+    <textarea maxlength="700" minlength="10" placeholder="Şiirinizi yazın..." id="poem3"></textarea>
+  </section>
+
+  <section>
+    <h2>Kendini Affettirmek İçin Mektup</h2>
+    <textarea maxlength="700" minlength="10" placeholder="Mektubunuzu yazın..." id="letter"></textarea>
+  </section>
+
+  <section>
+    <h2>Konum</h2>
+    <div id="locationDisplay">Konum bilgisi alınmadı.</div>
+    <button id="getLocationBtn">Konumumu Al</button>
+  </section>
+
+  <section>
+    <h2>Beraberlik Süresi</h2>
+    <input type="datetime-local" id="startDate" />
+    <div id="togetherTime"></div>
+  </section>
+</div>
+
+<script>
+  // Medya yükleyip gösterme
+  function previewFiles(input, container, type) {
+    container.innerHTML = "";
+    const files = input.files;
+    for(let file of files){
+      const url = URL.createObjectURL(file);
+      let el;
+      if(type === "video"){
+        el = document.createElement("video");
+        el.controls = true;
+        el.src = url;
+        el.style.maxHeight = "180px";
+      } else if(type === "photo"){
+        el = document.createElement("img");
+        el.src = url;
+        el.alt = "Fotoğraf";
+      } else if(type === "audio"){
+        el = document.createElement("audio");
+        el.controls = true;
+        el.src = url;
+      }
+      container.appendChild(el);
+    }
+  }
+  document.getElementById("videoInput").addEventListener("change", e=>{
+    previewFiles(e.target, document.getElementById("videoGrid"), "video");
+  });
+  document.getElementById("photoInput").addEventListener("change", e=>{
+    previewFiles(e.target, document.getElementById("photoGrid"), "photo");
+  });
+  document.getElementById("audioInput").addEventListener("change", e=>{
+    previewFiles(e.target, document.getElementById("audioGrid"), "audio");
+  });
+
+  // Konum alma ve gösterme
+  const locDisplay = document.getElementById("locationDisplay");
+  const getLocBtn = document.getElementById("getLocationBtn");
+  getLocBtn.onclick = () => {
+    if(!navigator.geolocation){
+      locDisplay.textContent = "Tarayıcınız konum desteği vermiyor.";
+      return;
+    }
+    locDisplay.textContent = "Konum alınıyor...";
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude.toFixed(5);
+      const lon = pos.coords.longitude.toFixed(5);
+      locDisplay.textContent = `Enlem: ${lat}, Boylam: ${lon}`;
+      // Harita linki
+      locDisplay.innerHTML += `<br><a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=12" target="_blank" rel="noopener">Haritada Göster</a>`;
+    }, err => {
+      locDisplay.textContent = "Konum alınamadı: " + err.message;
+    });
+  };
+
+  // Beraberlik süresi hesaplama
+  const startDateInput = document.getElementById("startDate");
+  const togetherTimeDiv = document.getElementById("togetherTime");
+  startDateInput.onchange = () => {
+    const start = new Date(startDateInput.value);
+    if(isNaN(start)){
+      togetherTimeDiv.textContent = "";
+      return;
+    }
+    const now = new Date();
+    let diffMs = now - start;
+    if(diffMs < 0){
+      togetherTimeDiv.textContent = "Başlangıç zamanı gelecekte olamaz!";
+      return;
+    }
+    const days = Math.floor(diffMs / (1000*60*60*24));
+    diffMs -= days * (1000*60*60*24);
+    const hours = Math.floor(diffMs / (1000*60*60));
+    diffMs -= hours * (1000*60*60);
+    const minutes = Math.floor(diffMs / (1000*60));
+
+    togetherTimeDiv.textContent = `Beraberlik süresi: ${days} gün, ${hours} saat, ${minutes} dakika.`;
+  };
+</script>
+
+</body>
+      </html>
